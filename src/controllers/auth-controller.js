@@ -1,9 +1,8 @@
 import express from 'express';
-import User from '../models/user.js'; // Ensure correct path
+import User from '../models/user.js';
 import dotenv from 'dotenv';
-import { protect } from '../middleware/auth-middleware.js';
 import { generateToken } from '../service/auth-service.js';
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 const router = express.Router();
 
@@ -48,11 +47,11 @@ router.post('/register', async (req, res) => {
 // @desc    Authenticate user & get token
 // @access  Public
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     console.log("Login attempt for email:", req.body);
     try {
         // Check if user exists
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -60,10 +59,10 @@ router.post('/login', async (req, res) => {
         // Check password
         const isMatch = await user.matchPassword(password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        res.json({
+        res.status(200).json({
             message: 'Logged in successfully',
             user: {
                 id: user._id,
@@ -73,23 +72,6 @@ router.post('/login', async (req, res) => {
             },
         });
 
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// @route   GET /api/auth/profile
-// @desc    Get user profile (protected route)
-// @access  Private
-router.get('/profile', protect, async (req, res) => {
-    try {
-        // req.user is set by the 'protect' middleware
-        const user = await User.findById(req.user).select('-password'); // Exclude password
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json(user);
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Server error' });

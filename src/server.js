@@ -5,16 +5,15 @@ import dotenv from 'dotenv';
 import authController from './controllers/auth-controller.js';
 import cors from 'cors';
 import taskController from './controllers/task-controller.js';
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000', // 👈 Replace with your React app's actual origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Specify allowed HTTP methods
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 }));
 
 // Connect to MongoDB

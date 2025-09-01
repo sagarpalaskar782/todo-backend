@@ -15,7 +15,7 @@ router.get('', protect, async (req, res) => {
 
         const listOfTask = await Task.find({ userId: req.user });
 
-        res.json({
+        res.status(200).json({
             message: 'List of task fetched successfully',
             data: listOfTask,
         });
@@ -45,7 +45,7 @@ router.post('', protect, async (req, res) => {
 
         await task.save();
 
-        res.json({
+        res.status(201).json({
             message: 'New task added',
             data: task,
         });
@@ -72,7 +72,7 @@ router.patch('', protect, async (req, res) => {
         const result = await Task.updateOne({ name: name }, { $set: { status: status } });
         console.log("Update result:", result);
 
-        res.json({
+        res.status(200).json({
             message: 'Task updated successfully',
             data: task,
         });
