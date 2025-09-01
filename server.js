@@ -2,9 +2,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import authController from './controllers/auth-controller.js';
+import authController from './src/controllers/auth-controller.js';
 import cors from 'cors';
-import taskController from './controllers/task-controller.js';
+import taskController from './src/controllers/task-controller.js';
 dotenv.config();
 
 const app = express();
